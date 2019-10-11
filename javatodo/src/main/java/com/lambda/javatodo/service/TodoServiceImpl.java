@@ -8,16 +8,16 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 
-@Service(value = "todosService")
+@Service(value = "todoService")
 public class TodoServiceImpl implements TodoService
 {
     @Autowired
-    private TodoRepository todorepo;
+    private TodoRepository todoRepo;
 
     @Override
     public Users getUserInfo(long id)
     {
-        return null /todorepo.getUserInfo();
+        return null todorepo.getUserInfo();
     }
 
     @Override
