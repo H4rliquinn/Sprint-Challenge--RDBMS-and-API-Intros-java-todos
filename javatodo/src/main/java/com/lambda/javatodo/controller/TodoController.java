@@ -1,10 +1,12 @@
 package com.lambda.javatodo.controller;
 
+import org.springframework.web.bind.annotation.RestController;
+
+@RestController
 public class TodoController
 {
     //GET /users/mine - return the user and todo based off of the authenticated user.
     // You can only look up your own. It is okay if this also lists the users roles and authorities.
-
 
     //POST /users/user - adds a user. Can only be done by an admin
 

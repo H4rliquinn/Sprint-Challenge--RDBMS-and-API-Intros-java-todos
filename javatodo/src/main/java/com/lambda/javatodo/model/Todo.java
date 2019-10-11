@@ -20,7 +20,7 @@ public class Todo extends Auditable
     @Column(nullable = false, unique = true)
     private String description;
 
-    Date dateStarted;
+    Date datestarted;
     boolean completed;
 
     @ManyToOne
@@ -32,10 +32,10 @@ public class Todo extends Auditable
     {
     }
 
-    public Todo(String description, Date dateStarted, Users user)
+    public Todo(String description, Date datestarted, Users user)
     {
         this.description = description;
-        this.dateStarted = dateStarted;
+        this.datestarted = datestarted;
         this.user = user;
         this.completed=false;
     }
@@ -60,14 +60,14 @@ public class Todo extends Auditable
         this.description = description;
     }
 
-    public Date getDateStarted()
+    public Date getdatestarted()
     {
-        return dateStarted;
+        return datestarted;
     }
 
-    public void setDateStarted(Date dateStarted)
+    public void setdatestarted(Date datestarted)
     {
-        this.dateStarted = dateStarted;
+        this.datestarted = datestarted;
     }
 
     public boolean isCompleted()
@@ -89,4 +89,6 @@ public class Todo extends Auditable
     {
         this.user = user;
     }
+
+
 }
