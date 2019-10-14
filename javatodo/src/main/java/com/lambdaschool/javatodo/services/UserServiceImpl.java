@@ -110,10 +110,17 @@ public class UserServiceImpl implements UserDetailsService,
         }
         newUser.setUserroles(newRoles);
 
-        for (Todo ue : user.getUserTodo())
+        for (Useremail ue : user.getUseremails())
         {
-            newUser.getUserTodo()
-                   .add(new Todo(ue.getDescription(),ue.getdatestarted(),newUser));
+            newUser.getUseremails()
+                   .add(new Useremail(newUser,
+                                      ue.getUseremail()));
+        }
+
+        for (Todo td : user.getUserTodos())
+        {
+            newUser.getUserTodos()
+                    .add(new Todo(td.getDescription(),td.getdatestarted(),newUser));
         }
 
         return userrepos.save(newUser);
@@ -155,13 +162,14 @@ public class UserServiceImpl implements UserDetailsService,
                 throw new EntityNotFoundException("User Roles are not updated through User. See endpoint POST: users/user/{userid}/role/{roleid}");
             }
 
-            if (user.getUserTodo()
+            if (user.getUseremails()
                     .size() > 0)
             {
-                for (Todo ue : user.getUserTodo())
+                for (Useremail ue : user.getUseremails())
                 {
-                    currentUser.getUserTodo()
-                               .add(new Todo(ue.getDescription(),ue.getdatestarted(),currentUser));
+                    currentUser.getUseremails()
+                               .add(new Useremail(currentUser,
+                                                  ue.getUseremail()));
                 }
             }
 
