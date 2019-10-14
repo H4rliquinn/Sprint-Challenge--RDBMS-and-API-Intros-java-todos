@@ -43,7 +43,7 @@ public class User extends Auditable
                cascade = CascadeType.ALL,
                orphanRemoval = true)
     @JsonIgnoreProperties("user")
-    private List<Useremail> useremails = new ArrayList<>();
+    private List<Todo> todos = new ArrayList<>();
 
     public User()
     {
@@ -126,14 +126,14 @@ public class User extends Auditable
         this.userroles = userroles;
     }
 
-    public List<Useremail> getUseremails()
+    public List<Todo> getUserTodo()
     {
-        return useremails;
+        return todos;
     }
 
-    public void setUseremails(List<Useremail> useremails)
+    public void setTodos(List<Todo> todos)
     {
-        this.useremails = useremails;
+        this.todos = todos;
     }
 
     @JsonIgnore
@@ -155,6 +155,6 @@ public class User extends Auditable
     @Override
     public String toString()
     {
-        return "User{" + "userid=" + userid + ", username='" + username + '\'' + ", password='" + password + '\'' + ", primaryEmail='" + primaryemail + '\'' + ", userroles=" + userroles + ", useremails=" + useremails + '}';
+        return "User{" + "userid=" + userid + ", username='" + username + '\'' + ", password='" + password + '\'' + ", primaryEmail='" + primaryemail + '\'' + ", userroles=" + userroles + ", todos=" + todos + '}';
     }
 }

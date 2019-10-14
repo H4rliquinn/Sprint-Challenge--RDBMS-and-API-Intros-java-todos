@@ -1,9 +1,6 @@
 package com.lambdaschool.javatodo.services;
 
-import com.lambdaschool.javatodo.models.Role;
-import com.lambdaschool.javatodo.models.User;
-import com.lambdaschool.javatodo.models.UserRoles;
-import com.lambdaschool.javatodo.models.Useremail;
+import com.lambdaschool.javatodo.models.*;
 import com.lambdaschool.javatodo.repository.RoleRepository;
 import com.lambdaschool.javatodo.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -113,11 +110,10 @@ public class UserServiceImpl implements UserDetailsService,
         }
         newUser.setUserroles(newRoles);
 
-        for (Useremail ue : user.getUseremails())
+        for (Todo ue : user.getUserTodo())
         {
-            newUser.getUseremails()
-                   .add(new Useremail(newUser,
-                                      ue.getUseremail()));
+            newUser.getUserTodo()
+                   .add(new Todo(ue.getDescription(),ue.getdatestarted(),newUser));
         }
 
         return userrepos.save(newUser);
@@ -159,14 +155,13 @@ public class UserServiceImpl implements UserDetailsService,
                 throw new EntityNotFoundException("User Roles are not updated through User. See endpoint POST: users/user/{userid}/role/{roleid}");
             }
 
-            if (user.getUseremails()
+            if (user.getUserTodo()
                     .size() > 0)
             {
-                for (Useremail ue : user.getUseremails())
+                for (Todo ue : user.getUserTodo())
                 {
-                    currentUser.getUseremails()
-                               .add(new Useremail(currentUser,
-                                                  ue.getUseremail()));
+                    currentUser.getUserTodo()
+                               .add(new Todo(ue.getDescription(),ue.getdatestarted(),currentUser));
                 }
             }
 
