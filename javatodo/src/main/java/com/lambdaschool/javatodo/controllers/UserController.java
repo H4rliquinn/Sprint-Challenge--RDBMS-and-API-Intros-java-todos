@@ -8,6 +8,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
@@ -27,94 +28,123 @@ public class UserController
     // http://localhost:2019/users/users/
     @PreAuthorize("hasAuthority('ROLE_ADMIN')")
     @GetMapping(value = "/users",
-                produces = {"application/json"})
+            produces = {"application/json"})
     public ResponseEntity<?> listAllUsers()
     {
         List<User> myUsers = userService.findAll();
         return new ResponseEntity<>(myUsers,
-                                    HttpStatus.OK);
+                HttpStatus.OK);
+    }
+
+    //GET /users/mine
+    @GetMapping(value = "/mine",
+            produces = {"application/json"})
+    public ResponseEntity<?> getMine()
+    {
+        User u = userService.findMe();
+        return new ResponseEntity<>(u,
+                HttpStatus.OK);
     }
 
     // http://localhost:2019/users/user/7
     @PreAuthorize("hasAuthority('ROLE_ADMIN')")
     @GetMapping(value = "/user/{userId}",
-                produces = {"application/json"})
+            produces = {"application/json"})
     public ResponseEntity<?> getUserById(
             @PathVariable
                     Long userId)
     {
         User u = userService.findUserById(userId);
         return new ResponseEntity<>(u,
-                                    HttpStatus.OK);
+                HttpStatus.OK);
     }
 
     // http://localhost:2019/users/user/name/cinnamon
     @PreAuthorize("hasAuthority('ROLE_ADMIN')")
     @GetMapping(value = "/user/name/{userName}",
-                produces = {"application/json"})
+            produces = {"application/json"})
     public ResponseEntity<?> getUserByName(
             @PathVariable
                     String userName)
     {
         User u = userService.findByName(userName);
         return new ResponseEntity<>(u,
-                                    HttpStatus.OK);
+                HttpStatus.OK);
     }
 
     // http://localhost:2019/users/user/name/like/da?sort=username
     @PreAuthorize("hasAuthority('ROLE_ADMIN')")
     @GetMapping(value = "/user/name/like/{userName}",
-                produces = {"application/json"})
+            produces = {"application/json"})
     public ResponseEntity<?> getUserLikeName(
             @PathVariable
                     String userName)
     {
         List<User> u = userService.findByNameContaining(userName);
         return new ResponseEntity<>(u,
-                                    HttpStatus.OK);
+                HttpStatus.OK);
     }
 
     // http://localhost:2019/users/getusername
     @GetMapping(value = "/getusername",
-                produces = {"application/json"})
+            produces = {"application/json"})
     @ResponseBody
     public ResponseEntity<?> getCurrentUserName(Authentication authentication)
     {
         return new ResponseEntity<>(authentication.getPrincipal(),
-                                    HttpStatus.OK);
+                HttpStatus.OK);
     }
 
     // http://localhost:2019/users/getuserinfo
     @GetMapping(value = "/getuserinfo",
-                produces = {"application/json"})
+            produces = {"application/json"})
     public ResponseEntity<?> getCurrentUserInfo(Authentication authentication)
     {
         User u = userService.findByName(authentication.getName());
         return new ResponseEntity<>(u,
-                                    HttpStatus.OK);
+                HttpStatus.OK);
     }
 
     // http://localhost:2019/users/user
-    //        {
-    //            "username": "Mojo",
-    //            "primaryemail": "mojo@lambdaschool.local",
-    //            "password" : "Coffee123",
-    //            "useremails": [
-    //            {
-    //                "useremail": "mojo@mymail.local"
-    //            },
-    //            {
-    //                "useremail": "mojo@mymail.local"
-    //            },
-    //            {
-    //                "useremail": "mojo@email.local"
-    //            }
-    //        ]
-    //        }
+    //    {
+    //    "username":"hops",
+    //            "password":"password",
+    //            "primaryemail" :"hops@bunny.hop",
+    //            "userroles": [
+    //    {
+    //        "role":{
+    //        "roleid":2
+    //    }
+    //    }
+    //    ],
+    //    "todos": [
+    //    {
+    //        "description":"Eat Carrots",
+    //            "datestarted":"2019-08-16T01:44:18.089+0000"
+    //    },
+    //    {
+    //        "description":"Bang on cage until everyone is awake",
+    //            "datestarted":"2019-08-16T01:44:18.089+0000"
+    //    }
+    //    ],
+    //    "useremails": [
+    //    {
+    //        "useremail":"mojo@mymail.local"
+    //    },
+    //    {
+    //        "useremail":"mojo@mymail.local"
+    //    },
+    //    {
+    //        "useremail":"mojo@email.local"
+    //    }
+    //            ]
+    //}
+
+
     @PreAuthorize("hasAuthority('ROLE_ADMIN')")
     @PostMapping(value = "/user",
-                 consumes = {"application/json"},
-                 produces = {"application/json"})
+            consumes = {"application/json"},
+            produces = {"application/json"})
     public ResponseEntity<?> addNewUser(@Valid
                                         @RequestBody
                                                 User newuser) throws URISyntaxException
@@ -124,14 +154,14 @@ public class UserController
         // set the location header for the newly created resource
         HttpHeaders responseHeaders = new HttpHeaders();
         URI newUserURI = ServletUriComponentsBuilder.fromCurrentRequest()
-                                                    .path("/{userid}")
-                                                    .buildAndExpand(newuser.getUserid())
-                                                    .toUri();
+                .path("/{userid}")
+                .buildAndExpand(newuser.getUserid())
+                .toUri();
         responseHeaders.setLocation(newUserURI);
 
         return new ResponseEntity<>(null,
-                                    responseHeaders,
-                                    HttpStatus.CREATED);
+                responseHeaders,
+                HttpStatus.CREATED);
     }
 
 
@@ -160,8 +190,8 @@ public class UserController
                                                 long id)
     {
         userService.update(updateUser,
-                           id,
-                           request.isUserInRole("ADMIN"));
+                id,
+                request.isUserInRole("ADMIN"));
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
@@ -187,7 +217,7 @@ public class UserController
                     long roleid)
     {
         userService.deleteUserRole(userid,
-                                   roleid);
+                roleid);
 
         return new ResponseEntity<>(HttpStatus.OK);
     }
@@ -203,7 +233,7 @@ public class UserController
                     long roleid)
     {
         userService.addUserRole(userid,
-                                roleid);
+                roleid);
 
         return new ResponseEntity<>(HttpStatus.CREATED);
     }

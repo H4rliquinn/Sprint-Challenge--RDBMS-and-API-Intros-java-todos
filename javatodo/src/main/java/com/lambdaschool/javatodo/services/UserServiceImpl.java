@@ -28,6 +28,16 @@ public class UserServiceImpl implements UserDetailsService,
     @Autowired
     private RoleRepository rolerepos;
 
+    @Override
+    public User findMe()
+    {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        User authUser = userrepos.findByUsername(auth.getName());
+        return authUser;
+    }
+
+
+
     @Transactional
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException

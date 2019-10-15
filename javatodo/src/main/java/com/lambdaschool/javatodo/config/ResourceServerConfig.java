@@ -27,20 +27,20 @@ public class ResourceServerConfig extends ResourceServerConfigurerAdapter
         // http.anonymous().disable();
 
         http.authorizeRequests()
-            .antMatchers("/",
+            .antMatchers("/**",
                          "/h2-console/**")
             .permitAll()
-            .antMatchers("/users/**",
-                         "/useremails/**")
-            .authenticated()
+//            .antMatchers("/users/**",
+//                         "/useremails/**")
+//            .authenticated()
             // restrict application data...
             // .antMatchers("/books", "/authors").hasAnyRole("ADMIN", "USER", "DATA")
             // .antMatchers("/data/**").hasAnyRole("ADMIN", "DATA")
             //
             // restrict based on HttpMethod and endpoint
             // .antMatchers(HttpMethod.GET, "/users/user/**").hasAnyRole("USER")
-            .antMatchers("/roles/**")
-            .hasAnyRole("ADMIN")
+//            .antMatchers("/roles/**")
+//            .hasAnyRole("ADMIN")
             .and()
             .exceptionHandling()
             .accessDeniedHandler(new OAuth2AccessDeniedHandler());
