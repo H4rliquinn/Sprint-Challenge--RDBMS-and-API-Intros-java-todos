@@ -1,5 +1,6 @@
 package com.lambdaschool.javatodo.services;
 
+import com.lambdaschool.javatodo.models.Todo;
 import com.lambdaschool.javatodo.models.User;
 import org.springframework.security.core.userdetails.UserDetails;
 
@@ -32,4 +33,5 @@ public interface UserService
                      long roleid);
 
     User findMe();
+
 }

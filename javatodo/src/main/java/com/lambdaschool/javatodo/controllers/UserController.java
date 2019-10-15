@@ -1,6 +1,8 @@
 package com.lambdaschool.javatodo.controllers;
 
+import com.lambdaschool.javatodo.models.Todo;
 import com.lambdaschool.javatodo.models.User;
+import com.lambdaschool.javatodo.services.TodoService;
 import com.lambdaschool.javatodo.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
@@ -24,7 +26,8 @@ public class UserController
 {
     @Autowired
     private UserService userService;
-
+    @Autowired
+    private TodoService todoService;
     // http://localhost:2019/users/users/
     @PreAuthorize("hasAuthority('ROLE_ADMIN')")
     @GetMapping(value = "/users",
@@ -132,10 +135,10 @@ public class UserController
     //        "useremail":"mojo@mymail.local"
     //    },
     //    {
-    //        "useremail":"mojo@mymail.local"
+    //        "useremail":"mojo@mymail2.local"
     //    },
     //    {
-    //        "useremail":"mojo@email.local"
+    //        "useremail":"mojo@email3.local"
     //    }
     //            ]
     //}
@@ -164,7 +167,16 @@ public class UserController
                 HttpStatus.CREATED);
     }
 
-
+    //    POST /users/todo/{userid}
+    @PostMapping(value = "/todo/{userid}",
+            consumes = {"application/json"},
+            produces = {"application/json"})
+    public ResponseEntity<?> addNewTodo(@Valid @RequestBody Todo newTodo,@PathVariable long userid)
+    {
+        newTodo.setUser(userService.findUserById(userid));
+        todoService.save(newTodo);
+        return new ResponseEntity<>(HttpStatus.CREATED);
+    }
     // http://localhost:2019/users/user/7
     //        {
     //            "userid": 7,
@@ -183,7 +195,7 @@ public class UserController
     //        ]
     //        }
     @PutMapping(value = "/user/{id}")
-    public ResponseEntity<?> updateUser(HttpServletRequest request,
+    public ResponseEntity<?> completeTodo(HttpServletRequest request,
                                         @RequestBody
                                                 User updateUser,
                                         @PathVariable
@@ -197,13 +209,14 @@ public class UserController
 
 
     // http://localhost:2019/users/user/14
+    //DELETE /users/userid/{userid}
     @PreAuthorize("hasAuthority('ROLE_ADMIN')")
-    @DeleteMapping("/user/{id}")
+    @DeleteMapping("/userid/{userid}")
     public ResponseEntity<?> deleteUserById(
             @PathVariable
-                    long id)
+                    long userid)
     {
-        userService.delete(id);
+        userService.delete(userid);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
